@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Add Seller</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+	<script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
+	<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+	<section class="section">
+		<div class="container">
+			<h1 class="title">
+				Add Seller Form
+			</h1>
+			<div class="content">
+				<button id="btnAdd" class="button"><i class="fa fa-plus"></i> Add Seller</button>
+			</div>
+			<div id="card-list" class="columns is-mobile">
+
+			</div>
+		</div>
+		<div id="modal" class="modal">
+			<div class="modal-background"></div>
+			<div class="modal-card">
+				<header class="modal-card-head">
+					<p class="modal-card-title">Add Seller</p>
+					<button class="btnClose delete" aria-label="close"></button>
+				</header>
+				<section class="modal-card-body">
+					<div class="field">
+						<label class="label">Seller Name</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<input class="input" id="txtSellerName" type="text" placeholder="Seller Name">
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Company Name</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<input class="input" id="txtCompanyName" type="text" placeholder="Company Name">
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Phone number</label>
+						<div class="control">
+							<input class="input" id="txtPhoneNumber" type="text" placeholder="Phone number">
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Whatsapp Number</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<input class="input" id="txtWhatsappNumber" type="text" placeholder="Whatsapp Number">
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Address</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<input class="input" id="txtAddress" type="text" placeholder="Address">
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Pincode</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<input class="input" id="txtPincode" type="text" placeholder="Pincode">
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Email</label>
+						<div class="control">
+							<input class="input" id="txtEmail" type="text" placeholder="Email">
+						</div>
+						<p class="help"></p>
+					</div>
+
+				</section>
+				<footer class="modal-card-foot">
+					<button id="btnSave" class="button is-success">Save changes</button>
+					<button id="btnClose" class="button">Cancel</button>
+				</footer>
+			</div>
+		</div>
+	</section>
+
+	<section class="section1">
+
+			<table id="custable">
+  <tr>
+    <th>Seller Name</th>
+		<th>Compay Name</th>
+    <th>Phone number</th>
+		<th>Whatsapp number</th>
+    <th>Address</th>
+    <th>Pincode</th>
+		<th>Email</th>
+    <th>Edit entry</th>
+    <th>Remove entry</th>
+  </tr>
+
+  </table>
+
+
+	</section>
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+	integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+	crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
+	<script>
+		var nextkey =0;
+		var config = {
+			apiKey: "AIzaSyBuBrpKvwMMnMJWjGf4UsJFZPYGaiVm250",
+    		authDomain: "fir-js-13ecc.firebaseapp.com",
+    		databaseURL: "https://fir-js-13ecc.firebaseio.com",
+    		projectId: "fir-js-13ecc",
+    		storageBucket: "fir-js-13ecc.appspot.com",
+    		messagingSenderId: "218732343795"
+		};
+		firebase.initializeApp(config);
+		var database = firebase.database();
+
+		database.ref('sellers').on('child_added', function(data) {
+			add_data_table(data.val().sellername,data.val().companyname,data.val().phonenumber,data.val().whatsappnumber,data.val().address,data.val().pincode,data.val().email,data.key);
+			var lastkey = data.key;
+			nextkey = parseInt(lastkey)+1;
+		});
+		database.ref('sellers').on('child_changed', function(data) {
+			update_data_table(data.val().sellername,data.val().companyname,data.val().phonenumber,data.val().whatsappnumber,data.val().address,data.val().pincode,data.val().email,data.key);
+		});
+		database.ref('sellers').on('child_removed', function(data) {
+			remove_data_table(data.key)
+		});
+
+		function add_data_table(sellername,companyname,phonenumber,whatsappnumber,address,pincode,email,phonenumber){
+			$("#custable").append('<tr id="'+phonenumber+'"><th>'+sellername+'</th><th>'+companyname+'</th><th>'+phonenumber+'</th><th>'+whatsappnumber+'</th><th>'+address+'</th><th>'+pincode+'</th><th>'+email+'</th><th><a href="#" data-key="'+phonenumber+'" class="card-footer-item btnEdit">Edit</a></th><th><a href="#" class="card-footer-item btnRemove"  data-key="'+phonenumber+'">Remove</a></th></tr>');
+			//<footer class="card-footer"><a href="#" data-key="'+key+'" class="card-footer-item btnEdit">Edit</a><a href="#" class="card-footer-item btnRemove"  data-key="'+key+'">Remove</a></footer>
+			//$("#card-list").append('<div class="key" id="'+key+'"><div class="card"><div class="card-image"><figure class="image is-4by3"><img src="'+pic+'"></figure></div><div class="card-content"><div class="media"><div class="media-content"><p class="title is-4">'+name+'</p><p class="subtitle is-6">@'+email+'</p></div></div></div><footer class="card-footer"><a href="#" data-key="'+key+'" class="card-footer-item btnEdit">Edit</a><a href="#" class="card-footer-item btnRemove"  data-key="'+key+'">Remove</a></footer></div></div>');
+		}
+		function update_data_table(sellername,companyname,phonenumber,whatsappnumber,address,pincode,email,phonenumber){
+			//$("#card-list #"+key).html('<div class="card"><div class="card-image"><figure class="image is-4by3"><img src="'+pic+'"></figure></div><div class="card-content"><div class="media"><div class="media-content"><p class="title is-4">'+name+'</p><p class="subtitle is-6">@'+email+'</p></div></div></div><footer class="card-footer"><a href="#" class="card-footer-item btnEdit"  data-key="'+key+'">Edit</a><a  data-key="'+key+'" href="#" class="card-footer-item btnRemove">Remove</a></footer></div>');
+			//$("#card-list #"+key).html('<div class="card"><div class="card-image"><figure class="image is-4by3"><img src="'+pic+'"></figure></div><div class="card-content"><div class="media"><div class="media-content"><p class="title is-4">'+name+'</p><p class="subtitle is-6">@'+email+'</p></div></div></div></div>
+			$("#custable #"+phonenumber).html('<th>'+sellername+'</th><th>'+companyname+'</th><th>'+phonenumber+'</th><th>'+whatsappnumber+'</th><th>'+address+'</th><th>'+pincode+'</th><th>'+email+'</th><th><a href="#" data-key="'+phonenumber+'" class="card-footer-item btnEdit">Edit</a></th><th><a href="#" class="card-footer-item btnRemove"  data-key="'+phonenumber+'">Remove</a></th>');
+		}
+		function remove_data_table(phonenumber){
+			//$("#card-list #"+key).remove();
+			$("#custable #"+phonenumber).remove();
+			//console.log("key is "+key);
+		}
+		function new_data(sellername,companyname,phonenumber,whatsappnumber,address,pincode,email,phonenumber){
+			database.ref('sellers/' + phonenumber).set({
+				sellername: sellername,
+				companyname: companyname,
+				phonenumber : phonenumber,
+				whatsappnumber : whatsappnumber,
+				address : address,
+				pincode : pincode,
+				email : email
+			});
+		}
+		function update_data(sellername,companyname,phonenumber,whatsappnumber,address,pincode,email,key){
+			database.ref('sellers/' + phonenumber).update({
+				sellername: sellername,
+				companyname: companyname,
+				phonenumber : phonenumber,
+				whatsappnumber : whatsappnumber,
+				address : address,
+				pincode : pincode,
+				email : email
+			});
+		}
+		$( "#btnAdd" ).click(function() {
+			$("#txtSellerName").val("");
+			$("#txtCompanyName").val("");
+			$("#txtPhoneNumber").val("");
+			$("#txtWhatsappNumber").val("");
+			$("#txtAddress").val("");
+			$("#txtPincode").val("");
+			$("#txtEmail").val("");
+			$("#txtType").val("N");
+			$("#txtKey").val("0");
+			$( "#modal" ).addClass( "is-active" );
+
+		});
+
+		$("#btnSave" ).click(function() {
+			if($("#txtType").val() == 'N'){
+				database.ref('sellers').once("value").then(function(snapshot) {
+
+					new_data($("#txtSellerName").val(),$("#txtCompanyName").val(),$("#txtPhoneNumber").val(),$("#txtWhatsappNumber").val(),$("#txtAddress").val(),$("#txtPincode").val(),$("#txtEmail").val(),$("#txtPhoneNumber").val());
+				});
+			}else{
+				update_data($("#txtSellerName").val(),$("#txtCompanyName").val(),$("#txtPhoneNumber").val(),$("#txtWhatsappNumber").val(),$("#txtAddress").val(),$("#txtPincode").val(),$("#txtEmail").val(),$("#txtPhoneNumber").val());
+			}
+			$("#btnClose").click();
+		});
+		$(document).on("click",".btnEdit",function(event){
+			event.preventDefault();
+			key = $(this).attr("data-key");
+			database.ref('sellers/'+key).once("value").then(function(snapshot){
+				$("#txtSellerName").val(snapshot.val().sellername);
+				$("#txtCompanyName").val(snapshot.val().companyname);
+				$("#txtPhoneNumber").val(snapshot.val().phonenumber);
+				$("#txtWhatsappNumber").val(snapshot.val().whatsappnumber);
+				$("#txtAddress").val(snapshot.val().address);
+				$("#txtPincode").val(snapshot.val().pincode);
+				$("#txtEmail").val(snapshot.val().email);
+				$("#txtType").val("E");
+				$("#txtKey").val(key);
+			});
+			$( "#modal" ).addClass( "is-active" );
+		});
+		$(document).on("click",".btnRemove",function(event){
+			event.preventDefault();
+			key = $(this).attr("data-key");
+			database.ref('sellers/' + key).remove();
+		})
+
+		$( "#btnClose,.btnClose" ).click(function() {
+			$( "#modal" ).removeClass( "is-active" );
+		});
+	</script>
+</body>
+</html>

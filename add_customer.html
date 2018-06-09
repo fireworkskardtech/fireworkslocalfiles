@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Add Customer</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+	<script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
+	<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+	<section class="section">
+		<div class="container">
+			<h1 class="title">
+				Add Customer Form
+			</h1>
+			<div class="content">
+				<button id="btnAdd" class="button"><i class="fa fa-plus"></i> Add customer</button>
+			</div>
+			<div id="card-list" class="columns is-mobile">
+
+			</div>
+		</div>
+		<div id="modal" class="modal">
+			<div class="modal-background"></div>
+			<div class="modal-card">
+				<header class="modal-card-head">
+					<p class="modal-card-title">Add Customer</p>
+					<button class="btnClose delete" aria-label="close"></button>
+				</header>
+				<section class="modal-card-body">
+					<div class="field">
+						<label class="label">Customer Name</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<input class="input" id="txtcustomerName" type="text" placeholder="customer Name">
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Customer Type</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<select id="txtcustomerType">
+  							<option value="Wholesale" selected>Wholesale</option>
+  							<option value="Semi-Wholesale">Semi Wholesale</option>
+							</select>
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Phone number</label>
+						<div class="control">
+							<input class="input" id="txtPhoneNumber" type="text" placeholder="Phone number">
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Whatsapp Number</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<input class="input" id="txtWhatsappNumber" type="text" placeholder="Whatsapp Number">
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Address</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<input class="input" id="txtAddress" type="text" placeholder="Address">
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Pincode</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<input class="input" id="txtPincode" type="text" placeholder="Pincode">
+						</div>
+						<p class="help"> </p>
+					</div>
+
+					<div class="field">
+						<label class="label">Email</label>
+						<div class="control">
+							<input class="input" id="txtEmail" type="text" placeholder="Email">
+						</div>
+						<p class="help"></p>
+					</div>
+
+				</section>
+				<footer class="modal-card-foot">
+					<button id="btnSave" class="button is-success">Save changes</button>
+					<button id="btnClose" class="button">Cancel</button>
+				</footer>
+			</div>
+		</div>
+	</section>
+
+	<section class="section1">
+
+			<table id="custable">
+  <tr>
+    <th>Customer Name</th>
+		<th>Customer Type</th>
+    <th>Phone number</th>
+		<th>Whatsapp number</th>
+    <th>Address</th>
+    <th>Pincode</th>
+		<th>Email</th>
+    <th>Edit entry</th>
+    <th>Remove entry</th>
+  </tr>
+
+  </table>
+
+
+	</section>
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+	integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+	crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
+	<script>
+		var nextkey =0;
+		var config = {
+			apiKey: "AIzaSyBuBrpKvwMMnMJWjGf4UsJFZPYGaiVm250",
+    		authDomain: "fir-js-13ecc.firebaseapp.com",
+    		databaseURL: "https://fir-js-13ecc.firebaseio.com",
+    		projectId: "fir-js-13ecc",
+    		storageBucket: "fir-js-13ecc.appspot.com",
+    		messagingSenderId: "218732343795"
+		};
+		firebase.initializeApp(config);
+		var database = firebase.database();
+
+		database.ref('customers').on('child_added', function(data) {
+			add_data_table(data.val().customername,data.val().customertype,data.val().phonenumber,data.val().whatsappnumber,data.val().address,data.val().pincode,data.val().email,data.key);
+		});
+		database.ref('customers').on('child_changed', function(data) {
+			update_data_table(data.val().customername,data.val().customertype,data.val().phonenumber,data.val().whatsappnumber,data.val().address,data.val().pincode,data.val().email,data.key);
+		});
+		database.ref('customers').on('child_removed', function(data) {
+			remove_data_table(data.key)
+		});
+
+		function add_data_table(customername,customertype,phonenumber,whatsappnumber,address,pincode,email,phonenumber){
+			$("#custable").append('<tr id="'+phonenumber+'"><th>'+customername+'</th><th>'+customertype+'</th><th>'+phonenumber+'</th><th>'+whatsappnumber+'</th><th>'+address+'</th><th>'+pincode+'</th><th>'+email+'</th><th><a href="#" data-key="'+phonenumber+'" class="card-footer-item btnEdit">Edit</a></th><th><a href="#" class="card-footer-item btnRemove"  data-key="'+phonenumber+'">Remove</a></th></tr>');
+			//<footer class="card-footer"><a href="#" data-key="'+key+'" class="card-footer-item btnEdit">Edit</a><a href="#" class="card-footer-item btnRemove"  data-key="'+key+'">Remove</a></footer>
+			//$("#card-list").append('<div class="key" id="'+key+'"><div class="card"><div class="card-image"><figure class="image is-4by3"><img src="'+pic+'"></figure></div><div class="card-content"><div class="media"><div class="media-content"><p class="title is-4">'+name+'</p><p class="subtitle is-6">@'+email+'</p></div></div></div><footer class="card-footer"><a href="#" data-key="'+key+'" class="card-footer-item btnEdit">Edit</a><a href="#" class="card-footer-item btnRemove"  data-key="'+key+'">Remove</a></footer></div></div>');
+		}
+		function update_data_table(customername,customertype,phonenumber,whatsappnumber,address,pincode,email,phonenumber){
+			//$("#card-list #"+key).html('<div class="card"><div class="card-image"><figure class="image is-4by3"><img src="'+pic+'"></figure></div><div class="card-content"><div class="media"><div class="media-content"><p class="title is-4">'+name+'</p><p class="subtitle is-6">@'+email+'</p></div></div></div><footer class="card-footer"><a href="#" class="card-footer-item btnEdit"  data-key="'+key+'">Edit</a><a  data-key="'+key+'" href="#" class="card-footer-item btnRemove">Remove</a></footer></div>');
+			//$("#card-list #"+key).html('<div class="card"><div class="card-image"><figure class="image is-4by3"><img src="'+pic+'"></figure></div><div class="card-content"><div class="media"><div class="media-content"><p class="title is-4">'+name+'</p><p class="subtitle is-6">@'+email+'</p></div></div></div></div>
+			$("#custable #"+phonenumber).html('<th>'+customername+'</th><th>'+customertype+'</th><th>'+phonenumber+'</th><th>'+whatsappnumber+'</th><th>'+address+'</th><th>'+pincode+'</th><th>'+email+'</th><th><a href="#" data-key="'+phonenumber+'" class="card-footer-item btnEdit">Edit</a></th><th><a href="#" class="card-footer-item btnRemove"  data-key="'+phonenumber+'">Remove</a></th>');
+		}
+		function remove_data_table(phonenumber){
+			//$("#card-list #"+key).remove();
+			$("#custable #"+phonenumber).remove();
+			//console.log("key is "+key);
+		}
+		function new_data(customername,customertype,phonenumber,whatsappnumber,address,pincode,email,phonenumber){
+			database.ref('customers/' + phonenumber).set({
+				customername: customername,
+				customertype: customertype,
+				phonenumber : phonenumber,
+				whatsappnumber : whatsappnumber,
+				address : address,
+				pincode : pincode,
+				email : email
+			});
+		}
+		function update_data(customername,customertype,phonenumber,whatsappnumber,address,pincode,email,key){
+			database.ref('customers/' + phonenumber).update({
+				customername: customername,
+				customertype: customertype,
+				phonenumber : phonenumber,
+				whatsappnumber : whatsappnumber,
+				address : address,
+				pincode : pincode,
+				email : email
+			});
+		}
+		$( "#btnAdd" ).click(function() {
+			$("#txtcustomerName").val("");
+			$("#txtcustomerType").val("");
+			$("#txtPhoneNumber").val("");
+			$("#txtWhatsappNumber").val("");
+			$("#txtAddress").val("");
+			$("#txtPincode").val("");
+			$("#txtEmail").val("");
+			$("#txtType").val("N");
+			$("#txtKey").val("0");
+			$( "#modal" ).addClass( "is-active" );
+
+		});
+
+		$("#btnSave" ).click(function() {
+			if($("#txtType").val() == 'N'){
+				database.ref('customers').once("value").then(function(snapshot) {
+
+					new_data($("#txtcustomerName").val(),$("#txtcustomerType").val(),$("#txtPhoneNumber").val(),$("#txtWhatsappNumber").val(),$("#txtAddress").val(),$("#txtPincode").val(),$("#txtEmail").val(),$("#txtPhoneNumber").val());
+				});
+			}else{
+				update_data($("#txtcustomerName").val(),$("#txtcustomerType").val(),$("#txtPhoneNumber").val(),$("#txtWhatsappNumber").val(),$("#txtAddress").val(),$("#txtPincode").val(),$("#txtEmail").val(),$("#txtPhoneNumber").val());
+			}
+			$("#txtPhoneNumber").prop("readonly", false);
+			$("#btnClose").click();
+		});
+		$(document).on("click",".btnEdit",function(event){
+			event.preventDefault();
+			key = $(this).attr("data-key");
+			$("#txtPhoneNumber").prop("readonly", true);
+			database.ref('customers/'+key).once("value").then(function(snapshot){
+				$("#txtcustomerName").val(snapshot.val().customername);
+				$("#txtcustomerType").val(snapshot.val().customertype);
+				$("#txtPhoneNumber").val(snapshot.val().phonenumber);
+				$("#txtWhatsappNumber").val(snapshot.val().whatsappnumber);
+				$("#txtAddress").val(snapshot.val().address);
+				$("#txtPincode").val(snapshot.val().pincode);
+				$("#txtEmail").val(snapshot.val().email);
+				$("#txtType").val("E");
+				$("#txtKey").val(key);
+			});
+			$( "#modal" ).addClass( "is-active" );
+		});
+		$(document).on("click",".btnRemove",function(event){
+			event.preventDefault();
+			key = $(this).attr("data-key");
+			database.ref('customers/' + key).remove();
+		})
+
+		$( "#btnClose,.btnClose" ).click(function() {
+			$( "#modal" ).removeClass( "is-active" );
+		});
+	</script>
+</body>
+</html>
