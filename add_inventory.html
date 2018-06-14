@@ -37,16 +37,55 @@ table.sortable thead {
 			<h1 class="title">
 				Add Inventory Form's
 			</h1>
-			<input id="txtName" type="text" placeholder="Name"/>
-			<select id="txtCategoryType">
-				<option value="Wholesale" selected>Category</option>
-				<option value="Semi-Wholesale">Sub-Category</option>
-			</select>
-			<button id="btnSave" class="button is-success">Save changes</button>
+			<div class="content">
+				<button id="btnAdd" class="button"><i class="fa fa-plus"></i> Add Seller</button>
+			</div>
 			<div id="card-list" class="columns is-mobile">
+
+			</div>
+		</div>
+		<div id="modal" class="modal">
+			<div class="modal-background"></div>
+			<div class="modal-card">
+				<header class="modal-card-head">
+					<p class="modal-card-title">Add Seller</p>
+					<button class="btnClose delete" aria-label="close"></button>
+				</header>
+				<section class="modal-card-body">
+					<div class="field">
+						<label class="label">Name</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<input class="input" id="txtName" type="text" placeholder=" Name">
+						</div>
+						<p class="help"> </p>
+					</div>
+					<div class="field">
+						<label class="label">Company Name</label>
+						<div class="control">
+							<input type="hidden" id="txtType">
+							<input type="hidden" id="txtKey">
+							<select id="txtCategoryType">
+								<option value="Category" selected>Category</option>
+								<option value="Sub-Category">Sub-Category</option>
+							</select>
+						</div>
+						<p class="help"> </p>
+					</div>
+
+
+				</section>
+				<footer class="modal-card-foot">
+					<button id="btnSave" class="button is-success">Save changes</button>
+					<button id="btnClose" class="button">Cancel</button>
+				</footer>
 			</div>
 		</div>
 
+
+
+		</div>
 	</section>
 
 	<section class="section1">
@@ -55,6 +94,8 @@ table.sortable thead {
   <tr>
     <th>Name</th>
 		<th>Type</th>
+		<th>Edit</th>
+		<th>Delete</th>
   </tr>
   </table>
 	</section>
@@ -75,75 +116,90 @@ table.sortable thead {
 		firebase.initializeApp(config);
 		var database = firebase.database();
 
-		database.ref('type').on('child_added', function(data) {
-			add_data_table(data.val().name,data.val().ctype,data.key);
+		database.ref('categories').on('child_added', function(data) {
+			add_data_table_categories(data.val().name,data.val().type,data.key);
 		});
-		database.ref('type').on('child_changed', function(data) {
-			update_data_table(data.val().name,data.val().ctype,data.key);
+		database.ref('categories').on('child_changed', function(data) {
+			update_data_table_categories(data.val().name,data.val().type,data.key);
 		});
-		database.ref('type').on('child_removed', function(data) {
-			remove_data_table(data.key)
+		database.ref('categories').on('child_removed', function(data) {
+			remove_data_table_categories(data.key)
+		});
+		database.ref('subcategories').on('child_added', function(data) {
+			add_data_table_subcategories(data.val().name,data.val().type,data.key);
+		});
+		database.ref('subcategories').on('child_changed', function(data) {
+			update_data_table_subcategories(data.val().name,data.val().type,data.key);
+		});
+		database.ref('subcategories').on('child_removed', function(data) {
+			remove_data_table_subcategories(data.key)
 		});
 
-		function add_data_table(sellername,companyname,phonenumber){
-			$("#custable").append('<tr id="'+phonenumber+'"><th>'+sellername+'</th><th>'+companyname+'</th><th>'+phonenumber+'</th><th>'+whatsappnumber+'</th><th>'+address+'</th><th>'+pincode+'</th><th>'+email+'</th><th><a href="#" data-key="'+phonenumber+'" class="card-footer-item btnEdit">Edit</a></th><th><a href="#" class="card-footer-item btnRemove"  data-key="'+phonenumber+'">Remove</a></th></tr>');
+		function add_data_table_categories(name,type,datakey){
+			$("#custable").append('<tr id="'+datakey+'"><th>'+name+'</th><th>'+type+'</th><th><a href="#" data-key="'+datakey+'" class="card-footer-item btnEdit">Edit</a></th><th><a href="#" class="card-footer-item btnRemove"  data-key="'+datakey+'">Remove</a></th></tr>');
 			//<footer class="card-footer"><a href="#" data-key="'+key+'" class="card-footer-item btnEdit">Edit</a><a href="#" class="card-footer-item btnRemove"  data-key="'+key+'">Remove</a></footer>
 			//$("#card-list").append('<div class="key" id="'+key+'"><div class="card"><div class="card-image"><figure class="image is-4by3"><img src="'+pic+'"></figure></div><div class="card-content"><div class="media"><div class="media-content"><p class="title is-4">'+name+'</p><p class="subtitle is-6">@'+email+'</p></div></div></div><footer class="card-footer"><a href="#" data-key="'+key+'" class="card-footer-item btnEdit">Edit</a><a href="#" class="card-footer-item btnRemove"  data-key="'+key+'">Remove</a></footer></div></div>');
 		}
-		function update_data_table(sellername,companyname,phonenumber,whatsappnumber,address,pincode,email,phonenumber){
+		function update_data_table_categories(name,type,datakey){
 			//$("#card-list #"+key).html('<div class="card"><div class="card-image"><figure class="image is-4by3"><img src="'+pic+'"></figure></div><div class="card-content"><div class="media"><div class="media-content"><p class="title is-4">'+name+'</p><p class="subtitle is-6">@'+email+'</p></div></div></div><footer class="card-footer"><a href="#" class="card-footer-item btnEdit"  data-key="'+key+'">Edit</a><a  data-key="'+key+'" href="#" class="card-footer-item btnRemove">Remove</a></footer></div>');
+			$("#custable").append('<tr id="'+datakey+'"><th>'+name+'</th><th>'+type+'</th><th><a href="#" data-key="'+datakey+'" class="card-footer-item btnEdit">Edit</a></th><th><a href="#" class="card-footer-item btnRemove"  data-key="'+datakey+'">Remove</a></th></tr>');
 			//$("#card-list #"+key).html('<div class="card"><div class="card-image"><figure class="image is-4by3"><img src="'+pic+'"></figure></div><div class="card-content"><div class="media"><div class="media-content"><p class="title is-4">'+name+'</p><p class="subtitle is-6">@'+email+'</p></div></div></div></div>
-			$("#custable #"+phonenumber).html('<th>'+sellername+'</th><th>'+companyname+'</th><th>'+phonenumber+'</th><th>'+whatsappnumber+'</th><th>'+address+'</th><th>'+pincode+'</th><th>'+email+'</th><th><a href="#" data-key="'+phonenumber+'" class="card-footer-item btnEdit">Edit</a></th><th><a href="#" class="card-footer-item btnRemove"  data-key="'+phonenumber+'">Remove</a></th>');
 		}
-		function remove_data_table(phonenumber){
+		function remove_data_table_categories(name){
 			//$("#card-list #"+key).remove();
-			$("#custable #"+phonenumber).remove();
+			$("#custable #"+name).remove();
 			//console.log("key is "+key);
 		}
-		function new_data(sellername,companyname,phonenumber,whatsappnumber,address,pincode,email,phonenumber){
-			database.ref('sellers/' + phonenumber).set({
-				sellername: sellername,
-				companyname: companyname,
-				phonenumber : phonenumber,
-				whatsappnumber : whatsappnumber,
-				address : address,
-				pincode : pincode,
-				email : email
+		function new_data_categories(name){
+			database.ref('categories/' + name).set({
+				name: name
 			});
 		}
-		function update_data(sellername,companyname,phonenumber,whatsappnumber,address,pincode,email,key){
-			database.ref('sellers/' + phonenumber).update({
-				sellername: sellername,
-				companyname: companyname,
-				phonenumber : phonenumber,
-				whatsappnumber : whatsappnumber,
-				address : address,
-				pincode : pincode,
-				email : email
+		function update_data_categories(name){
+			database.ref('categories/' + name).update({
+				name: name
+			});
+		}
+		function new_data_subcategories(name){
+			database.ref('subcategories/' + name).set({
+				name: name
+			});
+		}
+		function update_data_subcategories(name){
+			database.ref('subcategories/' + name).update({
+				name: name
 			});
 		}
 		$( "#btnAdd" ).click(function() {
-			$("#txtSellerName").val("");
-			$("#txtCompanyName").val("");
-			$("#txtPhoneNumber").val("");
-			$("#txtWhatsappNumber").val("");
-			$("#txtAddress").val("");
-			$("#txtPincode").val("");
-			$("#txtEmail").val("");
+			$("#txtName").val("");
+			$("#txtTypeSelector").val("");
 			$("#txtType").val("N");
-			$("#txtKey").val("0");
 			$( "#modal" ).addClass( "is-active" );
 
 		});
 
 		$("#btnSave" ).click(function() {
 			if($("#txtType").val() == 'N'){
-				database.ref('sellers').once("value").then(function(snapshot) {
+				if($("#txtTypeSelector").val() == 'Category'){
+					database.ref('categories').once("value").then(function(snapshot) {
+						new_data_categories($("#txtName").val());
+					});
 
-					new_data($("#txtSellerName").val(),$("#txtCompanyName").val(),$("#txtPhoneNumber").val(),$("#txtWhatsappNumber").val(),$("#txtAddress").val(),$("#txtPincode").val(),$("#txtEmail").val(),$("#txtPhoneNumber").val());
-				});
+				}
+				if($("#txtTypeSelector").val() == 'Sub-Category'){
+					database.ref('subcategories').once("value").then(function(snapshot) {
+						new_data_subcategories($("#txtName").val());
+					});
+				}
+
 			}else{
-				update_data($("#txtSellerName").val(),$("#txtCompanyName").val(),$("#txtPhoneNumber").val(),$("#txtWhatsappNumber").val(),$("#txtAddress").val(),$("#txtPincode").val(),$("#txtEmail").val(),$("#txtPhoneNumber").val());
+				if($("#txtTypeSelector").val() == 'Category'){
+					update_data_categories($("#txtName").val());
+				}
+				if($("#txtTypeSelector").val() == 'Sub-Category'){
+					update_data_subcategories($("#txtName").val());
+				}
+
 			}
 			$("#btnClose").click();
 		});
@@ -151,13 +207,7 @@ table.sortable thead {
 			event.preventDefault();
 			key = $(this).attr("data-key");
 			database.ref('sellers/'+key).once("value").then(function(snapshot){
-				$("#txtSellerName").val(snapshot.val().sellername);
-				$("#txtCompanyName").val(snapshot.val().companyname);
-				$("#txtPhoneNumber").val(snapshot.val().phonenumber);
-				$("#txtWhatsappNumber").val(snapshot.val().whatsappnumber);
-				$("#txtAddress").val(snapshot.val().address);
-				$("#txtPincode").val(snapshot.val().pincode);
-				$("#txtEmail").val(snapshot.val().email);
+				$("#txtName").val(snapshot.val().name);
 				$("#txtType").val("E");
 				$("#txtKey").val(key);
 			});
