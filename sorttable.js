@@ -3,13 +3,11 @@
   version 2
   7th April 2007
   Stuart Langridge, http://www.kryogenix.org/code/browser/sorttable/
-
   Instructions:
   Download this file
   Add <script src="sorttable.js"></script> to your HTML
   Add class="sortable" to any table you'd like to make sortable
   Click on the headers to sort
-
   Thanks to many, many people for contributions and suggestions.
   Licenced as X11: http://www.kryogenix.org/code/browser/licence.html
   This basically means: do what you want with it.
@@ -169,7 +167,7 @@ sorttable = {
     for (var i=0; i<table.tBodies[0].rows.length; i++) {
       text = sorttable.getInnerText(table.tBodies[0].rows[i].cells[column]);
       if (text != '') {
-        if (text.match(/^-?[£$¤]?[\d,.]+%?$/)) {
+        if (text.match(/^-?[Â£$Â¤]?[\d,.]+%?$/)) {
           return sorttable.sort_numeric;
         }
         // check for a date: dd/mm/yyyy or dd/mm/yy
@@ -492,4 +490,3 @@ var forEach = function(object, block, context) {
 		resolve.forEach(object, block, context);
 	}
 };
-

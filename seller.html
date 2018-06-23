@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Add Seller</title>
+	<script src="sorttable.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+	<script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
+	<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+table.sortable thead {
+    background-color:#eee;
+    color:#666666;
+    font-weight: bold;
+    cursor: default;
+}
+</style>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body background= "crack.jpg" onload="loadseller()">
+	<div id="login_div" class="main-div col-lg-4">
+		<h3>Fireworks Login</h3>
+		<input type="email" placeholder="Email here" id="email_field" />
+		<input type="password" placeholder="Password here" id="password_field" />
+
+		<button onclick="login()">Login to Account</button>
+	</div>
+
+	<div id="user_div" class="loggedin-div">
+
+
+
+	<div id="wrapper">
+
+				<!-- Sidebar -->
+				<div id="sidebar-wrapper">
+						<ul class="sidebar-nav">
+								<li class="sidebar-brand">
+
+											 <h5><p id="user_para">Welcome You're currently logged in.</p></h5>
+
+								</li>
+								<li>
+										<a href="#">Customer</a>
+								</li>
+								<li>
+										<a href="#">Seller</a>
+								</li>
+								<li>
+										<a href="#">Inventory management</a>
+								</li>
+								<li>
+										<a href="#">Purchase order</a>
+								</li>
+								<li>
+										<a href="#">Sales order</a>
+								</li>
+								<li>
+										<a href="#">Pricelist</a>
+								</li>
+								<li>
+										<a> <button id="logoutbutton" onclick="logout()">Logout</button></a>
+								</li>
+				</div>
+				<!-- /#sidebar-wrapper -->
+
+				<!-- Page Content -->
+				<div id="page-content-wrapper">
+						<div class="container-fluid">
+								<div class="row">
+										<div class="col-lg-12">
+
+												<!--<a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>-->
+												<section class="section">
+													<div class="container">
+														<h1 class="title">
+															Add Seller Form
+														</h1>
+														<div class="content">
+															<button id="btnSellerAdd" class="button"><i class="fa fa-plus"></i> Add Seller</button>
+														</div>
+														<div id="card-list" class="columns is-mobile">
+
+														</div>
+													</div>
+													<div id="modal" class="modal">
+														<div class="modal-background"></div>
+														<div class="modal-card">
+															<header class="modal-card-head">
+																<p class="modal-card-title">Add Seller</p>
+																<button class="btnSellerClose delete" aria-label="close"></button>
+															</header>
+															<section class="modal-card-body">
+																<div class="field">
+																	<label class="label">Seller Name</label>
+																	<div class="control">
+																		<input type="hidden" id="txtSellerType">
+																		<input type="hidden" id="txtSellerKey">
+																		<input class="input" id="txtSellerName" type="text" placeholder="Seller Name">
+																	</div>
+																	<p class="help"> </p>
+																</div>
+																<div class="field">
+																	<label class="label">Company Name</label>
+																	<div class="control">
+																		<input type="hidden" id="txtSellerType">
+																		<input type="hidden" id="txtSellerKey">
+																		<input class="input" id="txtSellerCompanyName" type="text" placeholder="Company Name">
+																	</div>
+																	<p class="help"> </p>
+																</div>
+																<div class="field">
+																	<label class="label">Phone number</label>
+																	<div class="control">
+																		<input class="input" id="txtSellerPhoneNumber" type="text" placeholder="Phone number">
+																	</div>
+																	<p class="help"> </p>
+																</div>
+																<div class="field">
+																	<label class="label">Whatsapp Number</label>
+																	<div class="control">
+																		<input type="hidden" id="txtSellerType">
+																		<input type="hidden" id="txtSellerKey">
+																		<input class="input" id="txtSellerWhatsappNumber" type="text" placeholder="Whatsapp Number">
+																	</div>
+																	<p class="help"> </p>
+																</div>
+																<div class="field">
+																	<label class="label">Address</label>
+																	<div class="control">
+																		<input type="hidden" id="txtSellerType">
+																		<input type="hidden" id="txtSellerKey">
+																		<input class="input" id="txtSellerAddress" type="text" placeholder="Address">
+																	</div>
+																	<p class="help"> </p>
+																</div>
+																<div class="field">
+																	<label class="label">Pincode</label>
+																	<div class="control">
+																		<input type="hidden" id="txtSellerType">
+																		<input type="hidden" id="txtSellerKey">
+																		<input class="input" id="txtSellerPincode" type="text" placeholder="Pincode">
+																	</div>
+																	<p class="help"> </p>
+																</div>
+																<div class="field">
+																	<label class="label">Email</label>
+																	<div class="control">
+																		<input class="input" id="txtSellerEmail" type="text" placeholder="Email">
+																	</div>
+																	<p class="help"></p>
+																</div>
+
+															</section>
+															<footer class="modal-card-foot">
+																<button id="btnSellerSave" class="button is-success">Save changes</button>
+																<button id="btnSellerClose" class="button">Cancel</button>
+															</footer>
+														</div>
+													</div>
+												</section>
+
+												<section class="section1">
+
+														<table id="sellertable" class="sortable">
+											  <tr>
+											    <th>Seller Name</th>
+													<th>Compay Name</th>
+											    <th>Phone number</th>
+													<th>Whatsapp number</th>
+											    <th>Address</th>
+											    <th>Pincode</th>
+													<th>Email</th>
+											    <th>Edit entry</th>
+											    <th>Remove entry</th>
+											  </tr>
+
+											  </table>
+
+
+												</section>
+										</div>
+								</div>
+						</div>
+				</div>
+				<!-- /#page-content-wrapper -->
+	</div>
+		</div>
+		<div id="noaccessdiv">
+	<button  onclick="logout()">Logout</button>
+		</div>
+	<!---demo--->
+
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+	integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+	crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
+
+	<script src="index.js"></script>
+</body>
+</html>

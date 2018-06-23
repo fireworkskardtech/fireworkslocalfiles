@@ -1,0 +1,95 @@
+<html>
+<head>
+  <title>Firebase Login</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body background= "crack.jpg">
+
+  <div id="login_div" class="main-div col-lg-4">
+    <h3>Fireworks Login</h3>
+    <input type="email" placeholder="Email here" id="email_field" />
+    <input type="password" placeholder="Password here" id="password_field" />
+
+    <button onclick="login()">Login to Account</button>
+  </div>
+
+  <div id="user_div" class="loggedin-div">
+
+
+
+  <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+
+                       <h5><p id="user_para">Welcome You're currently logged in.</p></h5>
+
+                </li>
+                <li>
+                    <a href="#">Customer</a>
+                </li>
+                <li>
+                    <a href="#">Seller</a>
+                </li>
+                <li>
+                    <a href="#">Inventory management</a>
+                </li>
+                <li>
+                    <a href="#">Purchase order</a>
+                </li>
+                <li>
+                    <a href="#">Sales order</a>
+                </li>
+                <li>
+                    <a href="#">Pricelist</a>
+                </li>
+                <li>
+                    <a> <button id="logoutbutton" onclick="logout()">Logout</button></a>
+                </li>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <!--<a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>-->
+						<div id="main"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+ </div>
+    </div>
+    <div id="noaccessdiv">
+<button  onclick="logout()">Logout</button>
+    </div>
+<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+	integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+	crossorigin="anonymous"></script>
+<!--<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBuBrpKvwMMnMJWjGf4UsJFZPYGaiVm250",
+    authDomain: "fir-js-13ecc.firebaseapp.com",
+    databaseURL: "https://fir-js-13ecc.firebaseio.com",
+    projectId: "fir-js-13ecc",
+    storageBucket: "fir-js-13ecc.appspot.com",
+    messagingSenderId: "218732343795"
+  };
+  firebase.initializeApp(config);
+</script>-->
+
+</script>
+
+  <script src="index.js"></script>
+
+</body>
+</html>

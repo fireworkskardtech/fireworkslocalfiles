@@ -1,0 +1,166 @@
+<html>
+<head>
+  <title>Add Products</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="sorttable.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
+</head>
+<body background= "crack.jpg" onload="loaddata()">
+
+  <div id="login_div" class="main-div col-lg-4">
+    <h3>Fireworks Login</h3>
+    <input type="email" placeholder="Email here" id="email_field" />
+    <input type="password" placeholder="Password here" id="password_field" />
+
+    <button onclick="login()">Login to Account</button>
+  </div>
+
+  <div id="user_div" class="loggedin-div">
+
+
+
+  <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+
+                       <h5><p id="user_para">Welcome You're currently logged in.</p></h5>
+
+                </li>
+                <li>
+                    <a href="#">Customer</a>
+                </li>
+                <li>
+                    <a href="#">Seller</a>
+                </li>
+                <li>
+                    <a href="#">Inventory management</a>
+                </li>
+                <li>
+                    <a href="#">Purchase order</a>
+                </li>
+                <li>
+                    <a href="#">Sales order</a>
+                </li>
+                <li>
+                    <a href="#">Pricelist</a>
+                </li>
+                <li>
+                    <a> <button id="logoutbutton" onclick="logout()">Logout</button></a>
+                </li>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <!--dummy -->
+                        <div id="page-content-wrapper">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-lg-12">
+
+                                        <div class="container">
+                                          <h1 class="title">
+                                            Add Products
+                                          </h1>
+
+
+                                        </div>
+
+                                          <input id="productname" type="text" name="productname" placeholder="Product Name"/>
+                                          <input id="itemcode" type="text" name="itemcode" placeholder="Item Code"/>
+                                          <input id="companynameInput" type="text" name="companyname" placeholder="Company Name"/><br/>
+                                          <input id="categoriesInput" type="text" name="categories" placeholder="Categories"/>
+                                          <input id="subcategoriesInput" type="text" name="subcategories" placeholder="Sub-categories"/>
+                                          <select id="unitconversion" placeholder="UnitConversion">
+                                              <option value="Case-Box-Piece">Case-Box-Piece</option>
+                                              <option value="Case-Piece">Case-Piece</option>
+                                              <option value="Case-Packets">Case-Packets</option>
+                                              <option value="Case-Tin">Case-Tin</option>
+                                              <option value="Bundle-Katta-Boxes">Bundle-Katta-Boxes</option>
+                                              <option value="Bundle-Boxes">Bundle-Boxes</option>
+                                              <option value="Bag-Kgs">Bag-Kgs</option>
+                                              <option value="Case-Cent-Katta">Case-Cent-Katta</option>
+                                              <option value="Case-Tube">Case-Tube</option>
+                                              <option value="Case-Cone">Case-Cone</option>
+                                              <option value="Bag-Packets">Bag-Packets</option>
+                                              <option value="Bag-Pieces">Bag-Pieces</option>
+                                          </select><br/>
+                                          <input id="itemcomment" type="text" name="itemcomment" placeholder="Item Comment"/>
+                                      <button id="btnProductSave" class="button is-success">Save changes</button>
+<div id="autocompletetagshere"></div>
+
+
+
+
+<div>
+                                          <table id="ProductTable" class="pure-table pure-table-bordered">
+                                            <thead>
+                                      <tr>
+                                        <th>Product Name</th>
+                                        <th>Item Code</th>
+                                        <th>Company Name</th>
+                                        <th>Category</th>
+                                        <th>Sub-Category</th>
+                                        <th>Unit Conversion</th>
+                                        <th>Comment</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody>
+                                      </table>
+
+
+
+
+</div>
+
+                            </div>
+                        </div>
+                        <!-- /#page-content-wrapper -->
+                 </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+ </div>
+    </div>
+    <div id="noaccessdiv">
+<button  onclick="logout()">Logout</button>
+    </div>
+<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+	integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+	crossorigin="anonymous"></script>
+</script>
+  <script src="index.js"></script>
+  <script>
+  function loaddata(){
+    loadcategories();
+    loadsubcategories();
+    loadcompanies();
+  }
+  function loadcategories(){
+    autocomplete(document.getElementById("categoriesInput"), categoryarray);
+  }
+  function loadsubcategories(){
+    autocomplete(document.getElementById("subcategoriesInput"), subcategoryarray);
+  }
+  function loadcompanies(){
+    autocomplete(document.getElementById("companynameInput"), companynames);
+  }
+  </script>
+
+</body>
+</html>
